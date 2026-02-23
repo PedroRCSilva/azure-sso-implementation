@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: azure-ad-sso-implementation
