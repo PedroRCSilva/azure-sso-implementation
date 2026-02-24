@@ -17,7 +17,7 @@ public class AuthDecoder implements Converter<Jwt, AbstractAuthenticationToken> 
     @Override
     public AbstractAuthenticationToken convert(Jwt source) {
         var email = source.getClaim("preferred_username");
-        var user = userService.findById((String) email);
+        var user = userService.findByEmail((String) email);
         var authorities = new SimpleGrantedAuthority(user.getRole().toString());
         return new JwtAuthenticationToken(source,List.of(authorities));
     }

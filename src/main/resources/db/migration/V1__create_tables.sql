@@ -1,4 +1,3 @@
--- Garante uso do schema padrão do H2
 CREATE SCHEMA IF NOT EXISTS PUBLIC;
 SET SCHEMA PUBLIC;
 

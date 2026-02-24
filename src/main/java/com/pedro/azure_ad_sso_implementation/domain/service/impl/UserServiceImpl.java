@@ -15,7 +15,7 @@ public class UserServiceImpl implements IUserService {
     private final IUserPersistence userPersistence;
 
     @Override
-    public User findById(String email) {
+    public User findByEmail(String email) {
         var user = userPersistence.findByEmail(email);
         return user.orElseThrow(()-> new UserNotFoundException("Usuário não encontrado"));
     }
