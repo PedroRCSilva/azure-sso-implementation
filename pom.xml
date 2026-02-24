@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.pedro</groupId>
-	<artifactId>azure-ad-sso-implementation</artifactId>
+	<artifactId>azure-sso-implementation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>azure-ad-sso-implementation</name>
+	<name>azure-sso-implementation</name>
 	<description>Repositorie example implementation Microsoft SSO</description>
 	<url/>
 	<licenses>
