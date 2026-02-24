@@ -7,23 +7,10 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL,
     name VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
-CREATE TABLE books (
-    id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    isbn VARCHAR(20) NOT NULL,
-    genre VARCHAR(100),
-    size INTEGER NOT NULL,
-    user_id UUID NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT fk_books_user
-        FOREIGN KEY (user_id)
-        REFERENCES users (id)
-        ON DELETE CASCADE
+    role varchar(40) NOT NULL
 );
 
-INSERT INTO users(name, email) VALUES (
-'Pedro Rocha','pedro.rsilva@sptech.school');
+
+INSERT INTO users(name, email,role) VALUES (
+'Pedro Rocha','pedro.rsilva@sptech.school','ADMIN');

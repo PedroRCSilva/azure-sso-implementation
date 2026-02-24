@@ -4,7 +4,12 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${AZURE_AD_JWK_SET_URI}
+          issuer-uri: ${AZURE_AD_ISSUER_URI}
   jpa:
     hibernate:
       ddl-auto: none

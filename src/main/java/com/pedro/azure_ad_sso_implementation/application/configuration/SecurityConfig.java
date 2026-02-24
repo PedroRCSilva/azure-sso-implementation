@@ -1,11 +1,9 @@
-package com.pedro.azure_ad_sso_implementation.infrastructure.configuration;
+package com.pedro.azure_ad_sso_implementation.application.configuration;
 
-import jakarta.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.List;
-import javax.sql.DataSource;
+import com.pedro.azure_ad_sso_implementation.domain.enums.UserRole;
+import com.pedro.azure_ad_sso_implementation.domain.service.IUserService;
 import lombok.RequiredArgsConstructor;
-import org.flywaydb.core.Flyway;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -14,17 +12,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-
 
     private static final String[] URLS_PERMITIDAS = {
           "/swagger-ui/**",
@@ -36,19 +31,35 @@ public class SecurityConfig {
           "/h2-console/**"
     };
 
+    private final IUserService userPersistence;
+
+    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+    private String issuerUri;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
               .csrf(AbstractHttpConfigurer::disable)
-              .headers(headers -> headers.frameOptions(FrameOptionsConfig::sameOrigin))
-              .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+              .sessionManagement(session ->
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+              .headers(headers ->
+                    headers.frameOptions(FrameOptionsConfig::sameOrigin))
+              .oauth2ResourceServer(oauth2 ->
+                    oauth2.jwt(
+                          jwt->jwt.jwtAuthenticationConverter(new AuthDecoder(userPersistence))
+                    )
+              )
               .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(URLS_PERMITIDAS).permitAll()
-                    .anyRequest().authenticated()
+                    .requestMatchers(URLS_PERMITIDAS)
+                    .permitAll()
+                    .anyRequest().hasAuthority(UserRole.ADMIN.toString())
               );
 
         return http.build();
     }
 
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        return JwtDecoders.fromIssuerLocation(issuerUri);
+    }
 }
-
