@@ -1,0 +1,29 @@
+-- Garante uso do schema padrão do H2
+CREATE SCHEMA IF NOT EXISTS PUBLIC;
+SET SCHEMA PUBLIC;
+
+CREATE TABLE users (
+    id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    name VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+CREATE TABLE books (
+    id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    isbn VARCHAR(20) NOT NULL,
+    genre VARCHAR(100),
+    size INTEGER NOT NULL,
+    user_id UUID NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT fk_books_user
+        FOREIGN KEY (user_id)
+        REFERENCES users (id)
+        ON DELETE CASCADE
+);
+
+INSERT INTO users(name, email) VALUES (
+'Pedro Rocha','pedro.rsilva@sptech.school');
