@@ -1,5 +1,3 @@
-azure-sso-implementation
-
 ## Visão geral
 
 Aplicação de exemplo usando **Spring Boot**, **Spring Security** e **Azure AD** como *OAuth2 Resource Server* para autenticar e autorizar acesso a um endpoint protegido.
